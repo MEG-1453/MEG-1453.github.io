@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="tr" data-lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muhammet Emin Genç — Yapay Zekâ · Bilgisayarlı Görü · Güvenlik</title>
+<meta name="description" content="Muhammet Emin Genç — yazılım mühendisliği öğrencisi, VectorX takım kaptanı (TEKNOFEST 2026 Havacılıkta Yapay Zekâ, Türkiye 3.'sü). Bilgisayarlı görü, güvenli backend, Android ve otonom sistemler.">
+<meta name="author" content="Muhammet Emin Genç">
+<meta name="theme-color" content="#050805">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Muhammet Emin Genç — AI · Computer Vision · Security">
+<meta property="og:description" content="VectorX takım kaptanı · TEKNOFEST 2026 Türkiye 3.'sü · Bilgisayarlı görü, güvenli backend ve otonom sistemler.">
+<meta property="og:url" content="https://meg-1453.github.io/">
+<meta property="og:image" content="https://meg-1453.github.io/assets/img/og.jpg">
+<link rel="canonical" href="https://meg-1453.github.io/">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css?v=20261106">
+<script>
+/* Boot: decide before first paint whether agents build the page (no flash of content). */
+(function () {
+  var d = document.documentElement;
+  try {
+    var qs = new URLSearchParams(location.search);
+    var q = qs.get('build'), qb = qs.get('boot');
+    var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var sd = navigator.connection && navigator.connection.saveData;
+    var seen = false, seenB = false;
+    try { seen = sessionStorage.getItem('meg:built') === '1'; seenB = sessionStorage.getItem('meg:booted') === '1'; } catch (e) {}
+    if (q === '1' || (q !== '0' && !rm && !sd && !seen)) {
+      d.classList.add('build-on');
+      setTimeout(function () { if (!window.__megBuild) d.classList.remove('build-on'); }, 4000);
+    }
+    if (qb === '1' || (qb !== '0' && !rm && !sd && !seenB)) {
+      d.classList.add('boot-on');
+      setTimeout(function () { if (!window.__megFx) d.classList.remove('boot-on'); }, 3500);
+    }
+    if (!rm) {
+      d.classList.add('fx');
+      setTimeout(function () { if (!window.__megFx) d.classList.remove('fx'); }, 4000);
+    }
+    if ((navigator.hardwareConcurrency || 4) <= 2 || (navigator.deviceMemory || 8) <= 2) d.classList.add('lite');
+    var l = null;
+    try { l = localStorage.getItem('meg:lang'); } catch (e) {}
+    if (l !== 'tr' && l !== 'en') l = (navigator.language || 'tr').toLowerCase().indexOf('tr') === 0 ? 'tr' : 'en';
+    d.setAttribute('data-lang', l);
+  } catch (e) {}
+})();
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Muhammet Emin Genç","url":"https://meg-1453.github.io/","jobTitle":"Software Engineering Student — AI / Computer Vision / Backend","email":"mailto:muhammetemingenc679@gmail.com","telephone":"+905335635229","address":{"@type":"PostalAddress","addressLocality":"İstanbul","addressCountry":"TR"},"alumniOf":{"@type":"CollegeOrUniversity","name":"Nişantaşı Üniversitesi"},"award":"TEKNOFEST 2026 Havacılıkta Yapay Zekâ Yarışması — Türkiye 3.","sameAs":["https://github.com/MEG-1453","https://www.linkedin.com/in/muhammet-emin-gen%C3%A7-a6797a38b/"],"knowsAbout":["Computer Vision","Object Detection","PyTorch","YOLO","ROS 2","Spring Boot","Android","Cybersecurity"]}
+</script>
+<script src="assets/js/sfx.js?v=20261106" defer></script>
+<script src="assets/js/main.js?v=20261106" defer></script>
+<script src="assets/js/fx.js?v=20261106" defer></script>
+<script src="assets/js/charts.js?v=20261106" defer></script>
+<script src="assets/js/jarvis.js?v=20261106" defer></script>
+<script src="assets/js/build.js?v=20261106" defer></script>
+</head>
+<body>
+<div id="boot" aria-hidden="true">
+  <p class="boot-sim mono" id="boot-sim">SİMÜLASYON</p>
+  <p class="boot-snd mono" id="boot-snd"></p>
+  <div class="boot-log" id="boot-log"></div>
+  <div class="b-edge"></div>
+  <div class="ipanel" id="fp-panel">
+    <div class="ip-h"><span class="dotr"></span>TARGET NODE FINGERPRINTED<em id="fp-hash">#——</em></div>
+    <div class="fp-body"><canvas id="fp-radar"></canvas><div class="fp-rows" id="fp-rows"></div><div class="fp-sweep"></div></div>
+    <div class="fp-foot"><span>exposure score</span><span><b id="fp-risk">0</b>/100</span></div>
+  </div>
+  <div class="ipanel" id="feed">
+    <div class="ip-h"><span class="dotr"></span>ACCESSING LOCAL VIDEO FEED…<em id="feed-src">/dev/video0</em></div>
+    <div class="feed-wrap"><canvas id="feed-cv" width="128" height="72"></canvas><span class="rec">REC</span><span id="feed-txt">NO SIGNAL</span><span class="cam-id">CAM_00 · 1280×720</span><span id="feed-tc">00:00:00</span></div>
+  </div>
+  <div id="b-alarm">
+    <div class="visor"><i></i></div>
+    <div class="crit" id="b-crit">PORTFOLYOMA HOŞ GELDİNİZ</div>
+    <div class="crit-sub">CRITICAL_SYSTEM_BREACH · INTEGRITY: COMPROMISED<br>NODE <b id="node-name">—</b> · LOCK <b id="node-hash">—</b></div>
+    <button class="b-cta" id="b-cta" type="button">
+      <span class="b-cta-ring" aria-hidden="true"><svg viewBox="0 0 48 48"><circle class="trk" cx="24" cy="24" r="21"/><circle class="prog" cx="24" cy="24" r="21" pathLength="1"/></svg><i>▶</i></span>
+      <span class="b-cta-l"><b id="b-cta-t">SİNEMATİK MODU BAŞLAT</b><small id="b-cta-s">sesli · yaklaşık 40 sn</small></span>
+    </button>
+    <p class="b-cta-h mono" id="b-cta-h"></p>
+    <div class="b-count mono">SELF-DESTRUCT <b id="b-cnt">3</b></div>
+    <div class="visor"><i></i></div>
+  </div>
+  <div id="b-panic"></div>
+  <canvas id="b-fx"></canvas>
+  <div class="boot-hello" id="boot-hello">
+    <div class="bh-stage bh-s1">
+      <p class="bh-j1 mono" id="bh-j1"></p>
+      <p class="bh-j2" id="bh-j2"></p>
+    </div>
+    <div class="bh-stage bh-s2">
+      <p class="bh-hand hand" id="bh-hand">Merak etme, sadece benim:</p>
+      <p class="bh-name" id="bh-name">Muhammet Emin Genç</p>
+      <p class="bh-role mono" id="bh-role">AI · Computer Vision · Secure Backend</p>
+    </div>
+  </div>
+  <p class="boot-skip mono" id="boot-skip">atla: tıkla / bir tuşa bas</p>
+</div>
+<div id="cr-dlg" role="alertdialog" aria-labelledby="cr-dlgh"><div class="dh"><i class="sp" aria-hidden="true"></i><span id="cr-dlgh">portfolio.exe yanıt vermiyor</span></div><p id="cr-dlgp"></p><div class="bt"><button type="button" id="cr-wait">Bekle</button><button type="button" class="pri" id="cr-kill">Sonlandır</button></div></div>
+<div id="cr-screen" aria-hidden="true"><div class="cr-in"><span class="cr-h mono">FATAL · portfolio.exe</span><div class="cr-t">Segmentation fault<span id="cr-sub"></span></div><pre id="cr-dump" class="mono"></pre><div class="cr-bar"><i id="cr-bar"></i></div><div class="cr-f mono" id="cr-f"></div></div></div>
+<div id="cr-boot" aria-hidden="true"><pre id="cr-log" class="mono"></pre></div>
+<div id="cr-recover" aria-live="polite"><div><div class="rk mono" id="cr-rk"></div><div class="r1" id="cr-r1"></div><div class="r2" id="cr-r2"></div><div class="r3 mono" id="cr-r3"></div></div></div>
+<canvas id="cr-gl" aria-hidden="true"></canvas>
+<button type="button" id="cr-skip" class="mono">atla ›</button>
+<div id="doors" aria-hidden="true"><div class="door l"><span>MEG-1453://</span></div><div class="door r"><span>PORTFOLIO</span></div></div>
+<div class="stars" aria-hidden="true"></div>
+<a class="skip" href="#main" data-i18n="nav.skip">İçeriğe geç</a>
+
+<header class="nav" data-section>
+  <div class="wrap nav-in">
+    <a class="brand mono" href="#hero" data-b="draw" aria-label="Muhammet Emin Genç"><span class="g">~/</span>meg<span class="brand-id">-1453</span><span class="blink" aria-hidden="true">_</span></a>
+    <nav class="nav-links" id="nav-links" data-b="group" aria-label="Menü">
+      <a href="#about" data-i18n="nav.about">Hakkımda</a>
+      <a href="#vectorx">VectorX</a>
+      <a href="#security" data-i18n="nav.security">Güvenlik</a>
+      <a href="#projects" data-i18n="nav.projects">Projeler</a>
+      <a href="#skills" data-i18n="nav.skills">Yetkinlikler</a>
+      <a href="#experience" data-i18n="nav.exp">Deneyim</a>
+      <a href="#contact" data-i18n="nav.contact">İletişim</a>
+    </nav>
+    <div class="nav-actions" data-b="group">
+      <button class="snd-btn mono" id="snd-btn" type="button" aria-pressed="false" data-i18n-label="nav.snd" aria-label="Sesi aç / kapat"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="w1" d="M15.5 8.5a5 5 0 0 1 0 7"/><path class="w2" d="M19 5a10 10 0 0 1 0 14"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg></button>
+      <button class="lang-btn mono" id="lang-btn" type="button" aria-label="Dil / Language"><span data-l="tr">TR</span><i>/</i><span data-l="en">EN</span></button>
+      <a class="btn btn-sm" href="assets/cv/Muhammet_Emin_Genc_CV_TR.pdf" data-cv download>CV <span aria-hidden="true">↓</span></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" data-i18n-label="nav.menu" aria-label="Menüyü aç"><i></i><i></i></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================== HERO ============================== -->
+<section class="hero" id="hero" data-live>
+  <div class="hero-bg" aria-hidden="true">
+    <i class="pk" style="--y:168px;--d:9s;--t:-2s"></i>
+    <i class="pk" style="--y:392px;--d:12s;--t:-7s"></i>
+    <i class="pk" style="--y:560px;--d:10s;--t:-4s"></i>
+    <i class="pk v" style="--x:784px;--d:8s;--t:-1s"></i>
+    <i class="pk v" style="--x:1176px;--d:11s;--t:-6s"></i>
+    <i class="pk v" style="--x:336px;--d:13s;--t:-9s"></i>
+    <div class="orbit">
+      <div class="orb orb-a"><svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="196" stroke-dasharray="2 9"/><circle cx="200" cy="200" r="160" stroke-dasharray="70 16 8 16"/><circle class="blip" cx="200" cy="40" r="4"/></svg></div>
+      <div class="orb orb-b"><svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="150" stroke-dasharray="1 6"/><path d="M200 34v30M200 336v30M34 200h30M336 200h30"/><circle class="blip" cx="350" cy="200" r="3"/></svg></div>
+      <div class="orb orb-c"><svg viewBox="0 0 400 400"><path class="sweep" d="M200 200 L200 20 A180 180 0 0 1 356 110 Z"/></svg></div>
+    </div>
+  </div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow mono" data-b="draw"><span class="eb-k">[ VX-01 ]</span><span data-i18n="hero.badge">TEKNOFEST 2026 · Havacılıkta Yapay Zekâ · <b>Türkiye 3.'sü</b></span></p>
+      <p class="hello hand" data-anno aria-hidden="true" data-i18n="an.hello">Merhaba, ben</p>
+      <h1 class="hero-title" data-b="type">Muhammet Emin <span class="outline">GENÇ</span></h1>
+      <p class="hero-role mono" data-b="draw"><span class="g">&gt;</span> <span id="role" data-roles-tr="Yapay Zekâ &amp; Bilgisayarlı Görü|Güvenli Backend &amp; Dağıtık Sistemler|Android &amp; Uçtan Uca Ürün|Otonom Sistemler &amp; Robotik" data-roles-en="AI &amp; Computer Vision|Secure Backend &amp; Distributed Systems|Android &amp; End-to-End Products|Autonomous Systems &amp; Robotics">Yapay Zekâ &amp; Bilgisayarlı Görü</span><span class="caret" aria-hidden="true"></span></p>
+      <p class="hero-lead" data-b="draw" data-type="text" data-i18n="hero.lead">Yazılım mühendisliği öğrencisiyim. Kameranın gördüğünü anlayan yapay zekâ sistemleri, güvenli sunucu yazılımları ve mobil uygulamalar geliştiriyorum. Bir fikri ilk satırından çalışan ürüne kadar <b>baştan sona</b> kendim kuruyor, her kararı <b>ölçerek</b> veriyorum.</p>
+      <div class="hero-cta" data-b="group">
+        <a class="btn btn-primary" href="#vectorx"><span data-i18n="hero.cta1">VectorX'i incele</span> <span aria-hidden="true">↓</span></a>
+        <a class="btn" href="#contact" data-i18n="hero.cta2">İletişime geç</a>
+        <button class="btn btn-ghost mono" type="button" data-term-focus>&gt;_ terminal <kbd>/</kbd></button>
+      </div>
+      <dl class="stats" data-b="group">
+        <div class="stat"><dt>3.</dt><dd data-i18n="hero.s1">TEKNOFEST 2026'da Türkiye derecesi · takım kaptanı</dd></div>
+        <div class="stat"><dt><span data-n="26002" data-count>26.002</span></dt><dd data-i18n="hero.s2">yapay zekâyı eğitmek için elle işaretlenen nesne</dd></div>
+        <div class="stat"><dt>~3×</dt><dd data-i18n="hero.s3">yarışma boyunca artan isabet (0,30 → 0,87)</dd></div>
+        <div class="stat"><dt><span data-n="281" data-count>281</span></dt><dd data-i18n="hero.s4">kendi uygulamamda çalışan otomatik güvenlik testi</dd></div>
+      </dl>
+    </div>
+
+    <div class="hero-side" data-b="draw">
+      <div class="anno-term" data-anno aria-hidden="true">
+        <span class="hand" data-i18n="an.term">bir şey yaz, cevap veriyor!</span>
+        <svg class="mark mark-arrow" viewBox="0 0 80 50"><path pathLength="1" d="M4 8 C30 2 58 12 70 40 M58 34 L70 42 L74 29"/></svg>
+      </div>
+      <div class="term" id="term">
+        <div class="term-bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="term-title mono">jarvis@meg: ~</span>
+          <span class="term-state mono"><i aria-hidden="true"></i>online</span>
+        </div>
+        <div class="term-body" id="term-body">
+          <div class="term-out mono" id="term-out" role="log" aria-live="polite"></div>
+          <form class="term-line mono" id="term-form" autocomplete="off">
+            <label class="prompt" for="term-in">meg-1453@portfolio:~$</label>
+            <input id="term-in" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" enterkeyhint="send" data-i18n-ph="term.ph" placeholder="help yaz ya da soru sor…">
+          </form>
+        </div>
+      </div>
+      <div class="term-hints mono">
+        <button type="button" data-cmd="help">help</button>
+        <button type="button" data-cmd="neofetch">neofetch</button>
+        <button type="button" data-cmd="scan">scan</button>
+        <button type="button" data-cmd="jarvis teknofest">jarvis teknofest</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="sysbar mono" data-b="draw">
+      <span><i class="g" aria-hidden="true">●</i> <span data-i18n="sys.loc">İstanbul, Türkiye</span> · <b id="clock">--:--:--</b></span>
+      <span>uptime <b id="uptime">00:00</b></span>
+      <span><span data-i18n="sys.weight">sayfa</span> <b id="weight">—</b></span>
+      <span>deps <b>0</b></span>
+      <span>agents <b id="agents-n">—</b></span>
+    </div>
+  </div>
+</section>
+
+<div class="tlm" aria-hidden="true" data-live>
+  <div class="tlm-row">
+    <span class="tlm-k"><i></i>VX-TLM</span>
+    <div class="tlm-view"><div class="tlm-track"><span class="it"><i class="d"></i>OPERATÖR <b>MEG-1453</b></span><span class="it"><i class="d c"></i>MOD <b>OTONOM · İNTERNETSİZ</b></span><span class="it"><i class="d"></i>FRAME <b>1969 / 2250</b></span><span class="it"><i class="d"></i>GÖREV 1 · mAP@0.5 <b>0.30 → 0.87</b></span><span class="it"><i class="d c"></i>BYTETRACK <b>ID:07 · HAREKETLİ</b></span><span class="it"><i class="d"></i>GÖREV 2 · DPVO 3B HATA <b>1.63 m</b></span><span class="it"><i class="d w"></i>GÖREV 3 · REF 1 <b>BULDU · %74</b></span><span class="it"><i class="d c"></i>TERMAL ↔ RGB <b>ÇAPRAZ EŞLEŞME</b></span><span class="it"><i class="d"></i>VS1 <b>0.23 → 0.86</b></span><span class="it"><i class="d"></i>VS4 <b>0.16 → 0.71</b></span><span class="it"><i class="d c"></i>OTURUM <b>~36 / 60 dk</b></span><span class="it"><i class="d w"></i>GPU <b>RTX 5070 Ti · 8×</b></span><span class="it"><i class="d"></i>ETİKET <b>26.002 KUTU · 5.577 KARE</b></span><span class="it"><i class="d w"></i>TEKNOFEST 2026 <b>TÜRKİYE 3.'SÜ</b></span><span class="it"><i class="d"></i>OPERATÖR <b>MEG-1453</b></span><span class="it"><i class="d c"></i>MOD <b>OTONOM · İNTERNETSİZ</b></span><span class="it"><i class="d"></i>FRAME <b>1969 / 2250</b></span><span class="it"><i class="d"></i>GÖREV 1 · mAP@0.5 <b>0.30 → 0.87</b></span><span class="it"><i class="d c"></i>BYTETRACK <b>ID:07 · HAREKETLİ</b></span><span class="it"><i class="d"></i>GÖREV 2 · DPVO 3B HATA <b>1.63 m</b></span><span class="it"><i class="d w"></i>GÖREV 3 · REF 1 <b>BULDU · %74</b></span><span class="it"><i class="d c"></i>TERMAL ↔ RGB <b>ÇAPRAZ EŞLEŞME</b></span><span class="it"><i class="d"></i>VS1 <b>0.23 → 0.86</b></span><span class="it"><i class="d"></i>VS4 <b>0.16 → 0.71</b></span><span class="it"><i class="d c"></i>OTURUM <b>~36 / 60 dk</b></span><span class="it"><i class="d w"></i>GPU <b>RTX 5070 Ti · 8×</b></span><span class="it"><i class="d"></i>ETİKET <b>26.002 KUTU · 5.577 KARE</b></span><span class="it"><i class="d w"></i>TEKNOFEST 2026 <b>TÜRKİYE 3.'SÜ</b></span></div></div>
+  </div>
+  <div class="tlm-row tlm-rev">
+    <span class="tlm-k"><i></i>MEG-1453</span>
+    <div class="tlm-view"><div class="tlm-track"><span class="it"><i class="d"></i>MT-29 <b>281/281 PASS</b></span><span class="it"><i class="d c"></i>ŞİFRELEME <b>AES-256-GCM · HPKE/X25519</b></span><span class="it"><i class="d w"></i>DENETİM <b>4 AÇIK KAPATILDI</b></span><span class="it"><i class="d"></i>AI CONTROL <b>9 MCP ARACI · 73 TEST</b></span><span class="it"><i class="d c"></i>JARVIS <b>ROS 2 · DDS udp/7400</b></span><span class="it"><i class="d"></i>ESENLINK <b>NestJS + Next.js 14</b></span><span class="it"><i class="d c"></i>SOCIAL BACKEND <b>SPRING SECURITY · JWT</b></span><span class="it"><i class="d"></i>PROJE <b>12 · github.com/MEG-1453</b></span><span class="it"><i class="d w"></i>EĞİTİM <b>NİŞANTAŞI ÜNİ · YAZILIM MÜH.</b></span><span class="it"><i class="d c"></i>T3 VAKFI <b>TEKNOFEST İSTANBUL</b></span><span class="it"><i class="d"></i>DİLLER <b>TR · EN · AR</b></span><span class="it"><i class="d c"></i>KONUM <b>İSTANBUL · UTC+3</b></span><span class="it"><i class="d"></i>MT-29 <b>281/281 PASS</b></span><span class="it"><i class="d c"></i>ŞİFRELEME <b>AES-256-GCM · HPKE/X25519</b></span><span class="it"><i class="d w"></i>DENETİM <b>4 AÇIK KAPATILDI</b></span><span class="it"><i class="d"></i>AI CONTROL <b>9 MCP ARACI · 73 TEST</b></span><span class="it"><i class="d c"></i>JARVIS <b>ROS 2 · DDS udp/7400</b></span><span class="it"><i class="d"></i>ESENLINK <b>NestJS + Next.js 14</b></span><span class="it"><i class="d c"></i>SOCIAL BACKEND <b>SPRING SECURITY · JWT</b></span><span class="it"><i class="d"></i>PROJE <b>12 · github.com/MEG-1453</b></span><span class="it"><i class="d w"></i>EĞİTİM <b>NİŞANTAŞI ÜNİ · YAZILIM MÜH.</b></span><span class="it"><i class="d c"></i>T3 VAKFI <b>TEKNOFEST İSTANBUL</b></span><span class="it"><i class="d"></i>DİLLER <b>TR · EN · AR</b></span><span class="it"><i class="d c"></i>KONUM <b>İSTANBUL · UTC+3</b></span></div></div>
+  </div>
+</div>
+
+<!-- ============================== ABOUT ============================== -->
+<section class="section" id="about">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-idx mono" data-b="draw">// 01 · <span data-i18n="about.idx">HAKKIMDA</span><span class="stamp" aria-hidden="true">@MEG-1453</span></p>
+      <h2 data-b="type" data-i18n="about.title">Fikirden sahaya, <em>uçtan uca.</em></h2>
+    </header>
+    <div class="about-grid">
+      <div class="portrait-col">
+        <figure class="portrait" data-b="scan" id="portrait">
+          <img src="assets/img/me.webp" width="560" height="746" alt="Muhammet Emin Genç" loading="lazy" decoding="async">
+          <div class="cam-hud mono" aria-hidden="true">
+            <span><i class="rec"></i><span data-i18n="cam.live">CANLI</span> · YOLO11x-P2</span>
+            <span id="cam-frame">kare 0001 / 2250</span>
+          </div>
+          <div class="det" aria-hidden="true"><span><span data-i18n="about.det">insan</span> <b data-conf="0.99">0.99</b> · ID:01</span></div>
+          <div class="det det-2" aria-hidden="true"><span><span data-i18n="cam.cap">takım_kaptanı</span> <b data-conf="0.94">0.94</b></span></div>
+          <figcaption class="mono"><span>ID: MEG-1453 · ByteTrack ✓</span><span data-i18n="sys.loc">İstanbul, Türkiye</span></figcaption>
+        </figure>
+        <div class="anno-me" data-anno aria-hidden="true">
+          <svg class="mark mark-up" viewBox="0 0 50 44"><path pathLength="1" d="M40 40 C14 36 8 22 14 6 M6 15 L14 4 L22 14"/></svg>
+          <span class="hand" data-i18n="an.me">modelim beni de tespit etti :)</span>
+        </div>
+      </div>
+      <div class="about-copy">
+        <p data-b="draw" data-i18n="about.p1">Nişantaşı Üniversitesi'nde İngilizce Yazılım Mühendisliği 3. sınıf öğrencisiyim. Yapay zekâ, bilgisayarlı görü, otonom sistemler ve savunma-havacılık odaklı yazılım mimarileri üzerine çalışıyorum.</p>
+        <p data-b="draw" data-i18n="about.p2">VectorX takımının kaptanı olarak geliştirdiğimiz İHA otonomi hattıyla <b>TEKNOFEST 2026 Havacılıkta Yapay Zekâ Yarışması'nda Türkiye 3.'sü</b> olduk. Bunun yanında güvenlik odaklı kendi Android mesajlaşma uygulamamı, ROS 2 tabanlı Jarvis sistemimi ve Spring Boot, NestJS, Next.js ile web platformları geliştirdim.</p>
+        <div class="editor" data-b="draw">
+          <div class="term-bar">
+            <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="term-title mono">engineer.ts — meg-ide</span>
+            <span class="term-state mono"><i aria-hidden="true"></i>LIVE</span>
+          </div>
+          <div class="ed-body mono">
+            <span class="ed-ln" aria-hidden="true">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12</span>
+            <pre class="ed-code"><code data-type="code" data-i18n="ed.code"><span class="c">// engineer.ts — beni derleyen dosya</span>
+<span class="k">const</span> <span class="v">engineer</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="p">name</span><span class="o">:</span> <span class="s">"Muhammet Emin Genç"</span><span class="o">,</span>
+  <span class="p">handle</span><span class="o">:</span> <span class="s">"MEG-1453"</span><span class="o">,</span>
+  <span class="p">role</span><span class="o">:</span> <span class="o">[</span><span class="s">"Yapay Zekâ"</span><span class="o">,</span> <span class="s">"Bilgisayarlı Görü"</span><span class="o">,</span> <span class="s">"Güvenli Backend"</span><span class="o">],</span>
+  <span class="p">base</span><span class="o">:</span> <span class="s">"İstanbul, Türkiye"</span><span class="o">,</span>
+  <span class="p">award</span><span class="o">:</span> <span class="s">"TEKNOFEST 2026 · Türkiye 3.'sü"</span><span class="o">,</span>
+  <span class="p">stack</span><span class="o">:</span> <span class="o">[</span><span class="s">"PyTorch"</span><span class="o">,</span> <span class="s">"Spring Boot"</span><span class="o">,</span> <span class="s">"Kotlin"</span><span class="o">,</span> <span class="s">"ROS 2"</span><span class="o">],</span>
+  <span class="p">motto</span><span class="o">:</span> <span class="s">"Her kararı ölçerek ver."</span><span class="o">,</span>
+<span class="o">};</span>
+
+<span class="k">export default</span> <span class="f">build</span><span class="o">(</span><span class="v">engineer</span><span class="o">);</span> <span class="c">// ✓ derlendi · 0 hata</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== VECTORX ============================== -->
+<section class="section" id="vectorx">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-idx mono" data-b="draw">// 02 · <span data-i18n="vx.idx">AMİRAL GEMİSİ PROJE · TEKNOFEST 2026 · TÜRKİYE 3.'SÜ</span><span class="stamp" aria-hidden="true">@MEG-1453</span></p>
+      <h2 data-b="type" data-i18n="vx.title">VectorX — <em>gören, konumlanan, tanıyan drone</em></h2>
+      <p class="sec-lead" data-b="draw" data-i18n="vx.lead">Bir drone'un kamerasıyla çalışan ve üç işi aynı anda yapan yapay zekâ sistemi: görüntüdeki nesneleri bulur, GPS olmadan drone'un konumunu hesaplar ve kendisine gösterilen bir fotoğraftaki hedefi sahada arar. Hepsi <b>internetsiz</b> ve <b>60 dakikalık tek bir oturumda</b>.</p>
+    </header>
+
+    <div class="award" data-b="draw" data-anno data-live>
+      <span class="medal" aria-hidden="true">3</span>
+      <div class="award-t"><b data-i18n="vx.awT">TEKNOFEST 2026 Havacılıkta Yapay Zekâ Yarışması</b><span data-i18n="vx.awD">Türkiye'nin dört bir yanından üniversite takımları arasında · VectorX takım kaptanı</span></div>
+      <span class="award-r"><span data-i18n="vx.awR">Türkiye 3.'sü</span><svg class="mark mark-circle" viewBox="0 0 160 60" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M18 12 C52 2 132 2 150 22 C162 40 120 56 70 56 C24 56 4 44 8 28 C11 17 30 9 62 7"/></svg></span>
+      <div class="award-meta mono">
+        <span><span data-i18n="vx.mRole">ROL</span> <b data-i18n="vx.mRoleV">Takım Kaptanı &amp; AI Geliştiricisi</b></span>
+        <span><span data-i18n="vx.mTeam">EKİP</span> <b data-i18n="vx.mTeamV">5 kişi</b></span>
+        <span><span data-i18n="vx.mOp">KAPTAN</span> <b>MEG-1453</b></span>
+        <span class="hand anno-proud" aria-hidden="true" data-i18n="an.proud">en gurur duyduğum proje ↑</span>
+      </div>
+    </div>
+
+    <div class="tldr" data-b="draw">
+      <p class="tldr-k mono"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg><span data-i18n="tl.k">KISACA · HERKES İÇİN</span></p>
+      <p class="tldr-t" data-i18n="vx.tldr">5 kişilik bir takımın kaptanı olarak drone kamerasından gelen görüntüyü anlayan bir yapay zekâ geliştirdik ve TEKNOFEST 2026 Havacılıkta Yapay Zekâ Yarışması'nda <b>Türkiye 3.'sü</b> olduk. Yarışma boyunca sistemin isabetini <b>neredeyse üç katına</b> çıkardık; yapay zekâyı eğitmek için ekipçe <b>26.002 nesneyi elle işaretledik</b>.</p>
+    </div>
+
+    <div class="steps" data-b="group">
+      <article class="step panel">
+        <span class="step-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <p class="step-n mono" data-i18n="vx.s1n">01 · GÖR</p>
+        <h3 data-i18n="vx.s1t">Nesneleri bulur</h3>
+        <p data-i18n="vx.s1d">Görüntüdeki araçları, insanları ve iniş alanlarını işaretler; bir aracın hareket edip etmediğini, iniş alanının boş olup olmadığını anlar.</p>
+        <p class="step-m mono"><span data-i18n="vx.s1m">isabet skoru</span> <span class="t-dim">0,30 →</span> <b>0,87</b></p>
+      </article>
+      <article class="step panel">
+        <span class="step-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11 22 2l-9 19-2-8-8-2z"/></svg></span>
+        <p class="step-n mono" data-i18n="vx.s2n">02 · KONUMLAN</p>
+        <h3 data-i18n="vx.s2t">GPS olmadan yerini bilir</h3>
+        <p data-i18n="vx.s2d">Uydu sinyali kesilse bile yalnızca kameraya bakarak drone'un ne kadar ve hangi yöne gittiğini hesaplar.</p>
+        <p class="step-m mono"><span data-i18n="vx.s2m">ortalama hata</span> <span class="t-dim">7,71 m →</span> <b>6,03 m</b></p>
+      </article>
+      <article class="step panel">
+        <span class="step-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/><path d="m16 16-1.9-1.9"/></svg></span>
+        <p class="step-n mono" data-i18n="vx.s3n">03 · TANI</p>
+        <h3 data-i18n="vx.s3t">Fotoğraftaki hedefi bulur</h3>
+        <p data-i18n="vx.s3d">Görev başında verilen bir fotoğraftaki nesneyi binlerce kare arasından bulur; normal kamerada da termal kamerada da.</p>
+        <p class="step-m mono"><span data-i18n="vx.s3m">isabet skoru</span> <span class="t-dim">0,23 →</span> <b>0,86</b></p>
+      </article>
+    </div>
+
+    <div class="vx-grid">
+      <div class="player">
+        <div class="video-wrap" data-b="scan">
+          <video id="vx-video" controls preload="none" playsinline muted loop width="1280" height="720" data-poster="assets/img/vx-poster.webp" data-i18n-label="vx.video" aria-label="VectorX demo videosu">
+            <source src="assets/video/vectorx-demo.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="chapters" data-b="group">
+          <button class="chap" type="button" data-t="15"><img src="assets/img/vx-rgb.webp" width="320" height="180" alt="" loading="lazy" decoding="async"><time class="mono">00:15</time><b data-i18n="vx.c1">Görev 1+2 · RGB</b></button>
+          <button class="chap" type="button" data-t="102"><img src="assets/img/vx-thermal.webp" width="320" height="180" alt="" loading="lazy" decoding="async"><time class="mono">01:42</time><b data-i18n="vx.c2">Görev 1+2 · Termal</b></button>
+          <button class="chap" type="button" data-t="125"><img src="assets/img/vx-ref.webp" width="320" height="180" alt="" loading="lazy" decoding="async"><time class="mono">02:05</time><b data-i18n="vx.c3">Görev 3 · Referans</b></button>
+          <button class="chap" type="button" data-t="165"><img src="assets/img/vx-cross.webp" width="320" height="180" alt="" loading="lazy" decoding="async"><time class="mono">02:45</time><b data-i18n="vx.c4">Görev 3 · RGB → Termal</b></button>
+          <button class="chap" type="button" data-t="207"><img src="assets/img/vx-match.webp" width="320" height="180" alt="" loading="lazy" decoding="async"><time class="mono">03:27</time><b data-i18n="vx.c5">Doğru eşleşmeler</b></button>
+        </div>
+        <p class="anno-line hand" data-anno aria-hidden="true" data-i18n="an.chap">↑ bir bölüme tıkla, video o ana atlar</p>
+      </div>
+      <aside class="vx-side">
+        <div class="panel" data-b="draw">
+          <p class="panel-k mono" data-i18n="vx.probK">NEDEN ZORDU?</p>
+          <p data-i18n="vx.prob">Sistem tek bir <b>60 dakikalık</b> oturumda yaklaşık 2.250 kareyi işledi. <b>İnternet yoktu</b> ve her kareye yalnızca <b>tek, geri alınamaz</b> bir cevap verilebiliyordu; yanlış yaparsan düzeltme şansın yok.</p>
+        </div>
+        <div class="panel" data-b="draw">
+          <p class="panel-k mono" data-i18n="vx.appK">NASIL ÇÖZDÜK?</p>
+          <p data-i18n="vx.app">Tek bir yapay zekâ modeline güvenmek yerine her iş için en uygun yöntemi seçip birbirine bağladık ve <b>her değişikliği ölçerek</b> karar verdik. Sistem süresini ve bağlantı hatalarını kendisi denetliyor, sorun çıkarsa kaldığı yerden devam ediyor.</p>
+        </div>
+        <div class="panel" data-b="draw">
+          <p class="panel-k mono" data-i18n="vx.roleK">BENİM ROLÜM</p>
+          <p data-i18n="vx.role">Takım kaptanı olarak teknik yönü belirledim: hangi yapay zekâ modelinin kullanılacağına karar verdim, eğitim ve test döngüsünü yönettim, teknik raporları yazdım ve 5 kişilik ekibin iş bölümünü koordine ettim.</p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="vx-bottom">
+      <div class="panel chart-box" data-b="draw">
+        <p class="panel-k mono" data-i18n="ch.vxK">İLK SÜRÜM → FİNAL</p>
+        <h3 class="chart-t" data-i18n="ch.vxT">Yarışma boyunca isabet skoru nasıl değişti?</h3>
+        <p class="chart-s" data-i18n="ch.vxS">0 = hiç bulamıyor, 1 = kusursuz. 16 Temmuz'da gönderilen ilk sürüm ile final sürümün karşılaştırması.</p>
+        <div class="cv" id="chart-vx"></div>
+      </div>
+      <dl class="kpis" data-b="group">
+        <div class="kpi panel"><dt data-i18n="vx.k1">%94,1</dt><dd data-i18n="vx.k1d">bir aracın hareket mi ettiğini, durduğunu mu doğru bilme oranı</dd></div>
+        <div class="kpi panel"><dt data-i18n="vx.k2">~36 dk</dt><dd data-i18n="vx.k2d">2.250 karelik görevi bitirme süresi (60 dakikalık sürenin ~%60'ı)</dd></div>
+        <div class="kpi panel"><dt>8×</dt><dd data-i18n="vx.k3d">konum hesaplayan yazılımı yeni ekran kartına taşıyıp hızlandırdım</dd></div>
+        <div class="kpi panel"><dt data-i18n="vx.k4">%1,2</dt><dd data-i18n="vx.k4d">hızlandırma sonrası sonuçlardaki sapma; yani neredeyse hiç</dd></div>
+      </dl>
+    </div>
+
+    <div class="gal-head" data-b="draw">
+      <p class="panel-k mono" data-i18n="vx.galK">MODELİN GÖZÜNDEN · GERÇEK ÇIKTILAR</p>
+      <p data-i18n="vx.galD">Sistemin test uçuşunda gerçekten gördükleri: araçlar, iniş alanları ve uzaktan küçücük görünen insanlar. İniş alanlarını tanıyan hazır bir veri seti olmadığı için ekipçe kendimiz işaretledik.</p>
+    </div>
+    <div class="gallery" data-b="group">
+      <figure class="shot"><img src="assets/img/vx-det1.webp" width="620" height="309" alt="Doğrulama karesinde taşıt tespitleri" loading="lazy" decoding="async"><figcaption class="mono"><span class="g">●</span> <span data-i18n="vx.g1c">taşıt · 0.8–0.9</span></figcaption><i class="sl" aria-hidden="true"></i></figure>
+      <figure class="shot"><img src="assets/img/vx-det2.webp" width="620" height="310" alt="Doğrulama karesinde iniş alanı tespiti" loading="lazy" decoding="async"><figcaption class="mono"><span class="g">●</span> <span data-i18n="vx.g2c">iniş alanı (UAİ) · 0.9</span></figcaption><i class="sl" aria-hidden="true"></i></figure>
+      <figure class="shot"><img src="assets/img/vx-det3.webp" width="606" height="309" alt="Doğrulama karesinde insan ve taşıt tespitleri" loading="lazy" decoding="async"><figcaption class="mono"><span class="g">●</span> <span data-i18n="vx.g3c">insan + taşıt · küçük ölçek</span></figcaption><i class="sl" aria-hidden="true"></i></figure>
+      <figure class="shot shot-traj"><img src="assets/img/vx-traj.webp" width="600" height="596" alt="DPVO ile kestirilen yörünge ve gerçek yörünge" loading="lazy" decoding="async"><figcaption class="mono"><span class="g">●</span> <span data-i18n="vx.g4c">GPS'siz hesaplanan rota (turuncu) ve gerçek rota (mavi)</span></figcaption></figure>
+    </div>
+
+    <details class="tech" data-b="draw">
+      <summary class="mono"><span class="g">$</span> <span data-i18n="vx.techS">cat teknik-detaylar.md</span><span class="tech-hint" data-i18n="vx.techH">mühendisler için: mimari, görev detayları, katkılar</span></summary>
+      <div class="tech-body">
+        <div class="pipe panel">
+          <p class="panel-k mono" data-i18n="vx.archK">SİSTEM MİMARİSİ</p>
+          <div class="pipe-flow">
+            <div class="node node-src"><b data-i18n="vx.n0t">Yarışma Sunucusu</b><span data-i18n="vx.n0d">Kare akışı (~2.250 kare/oturum), GT sinyali, cevap kabulü</span></div>
+            <div class="link mono" aria-hidden="true"><span data-i18n="vx.l1">kare</span><i>→</i></div>
+            <div class="node-group">
+              <p class="ng-k mono" data-i18n="vx.g1">ANA SÜREÇ · PYTHON 3.10</p>
+              <div class="node"><b data-i18n="vx.n1t">Görev 1 · Nesne Tespiti</b><span data-i18n="vx.n1d">YOLO11x + P2 başlığı · 1920 px + TTA · ByteTrack (ayrık)</span></div>
+              <div class="node"><b data-i18n="vx.n2t">Görev 2 · Pozisyon Kestirimi</b><span data-i18n="vx.n2d">DPVO görsel odometri · çevrim içi 12 parametreli 3B affine hizalama</span></div>
+            </div>
+            <div class="link mono" aria-hidden="true"><span>JSON · stdin/stdout</span><i>⇄</i></div>
+            <div class="node-group">
+              <p class="ng-k mono" data-i18n="vx.g2">GÖREV 3 WORKER · PYTHON 3.12</p>
+              <div class="node"><b data-i18n="vx.n3t">Aday üretimi → doğrulama</b><span data-i18n="vx.n3d">OWLv2 (image-guided) → DINOv3 gömmeleri → yoğun-DINO kapsama → DISK + LightGlue (RANSAC)</span></div>
+              <div class="node"><b data-i18n="vx.n4t">Karar</b><span data-i18n="vx.n4d">Sıralama + yayın vetosu · ara karelerde şablon takibi · Görev 1 kutularıyla konum düzeltme</span></div>
+            </div>
+          </div>
+          <div class="pipe-notes">
+            <p data-i18n="vx.note1"><b>Süre denetleyicisi:</b> Görev 1–2 çıkarımı ve sunucu iletişimi canlı ölçülür; bütçe yetmezse o karede Görev 3 sessizce atlanır.</p>
+            <p data-i18n="vx.note2"><b>Dayanıklılık:</b> N ardışık hatada Görev 3 güvenle kapanır, Görev 1–2 akmaya devam eder; bağlantı koparsa kaldığı yerden sürer. Görev 3 ortam çakışmasını önlemek için ayrı süreçte koşar.</p>
+          </div>
+        </div>
+
+        <div class="tasks">
+          <article class="task panel" data-anno>
+            <p class="panel-k mono" data-i18n="vx.t1k">GÖREV 1</p>
+            <h3 data-i18n="vx.t1t">Nesne Tespiti &amp; Hareket Sınıflandırma</h3>
+            <div class="delta"><span class="from" data-n="0.30" data-dec="2">0,30</span><span class="arr">→</span><span class="to-wrap"><span class="to" data-n="0.87" data-dec="2">0,87</span><svg class="mark mark-squiggle" viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 C12 2 20 12 30 6 S48 2 58 7 S78 11 98 4"/></svg></span><small class="mono">mAP@0.5</small><span class="hand anno-x3" aria-hidden="true" data-i18n="an.x3">≈ 3 kat!</span></div>
+            <div class="meter" style="--v:.87;--v0:.30" aria-hidden="true"><s></s><i></i></div>
+            <ul class="bul">
+              <li data-i18n="vx.t1a">YOLO11x + P2 yüksek çözünürlük başlığı: 4K karelerde küçük insan ve iniş alanı tespiti</li>
+              <li data-i18n="vx.t1b">Tespit ile takibin (ByteTrack) ayrıştırılması doğru kutuların silinmesini önledi: <b>+0,28 mAP</b></li>
+              <li data-i18n="vx.t1c">Optik akışla ego-motion giderilerek HAREKETLİ / SABİT ayrımı; iniş alanı için MÜSAİT / DOLU kontrolü</li>
+            </ul>
+          </article>
+          <article class="task panel">
+            <p class="panel-k mono" data-i18n="vx.t2k">GÖREV 2</p>
+            <h3 data-i18n="vx.t2t">Görsel Odometri ile Pozisyon Kestirimi</h3>
+            <div class="delta"><span class="from" data-n="7.71" data-dec="2">7,71</span><span class="arr">→</span><span class="to" data-n="6.03" data-dec="2">6,03</span><small class="mono" data-i18n="vx.t2u">m ort. hata</small></div>
+            <div class="meter meter-down" style="--v:.78;--v0:1" aria-hidden="true"><s></s><i></i></div>
+            <ul class="bul">
+              <li data-i18n="vx.t2a">Dokusuz zeminlerde (asfalt, çim) dayanıklı DPVO: 96 yama, yama ömrü 13, optimizasyon penceresi 10</li>
+              <li data-i18n="vx.t2b">GPS yokken En Küçük Kareler ile 12 parametreli 3B affine dönüşüm; son 200 çifte 20 kat ağırlık</li>
+              <li data-i18n="vx.t2c"><b>−%21,8</b> hata · 42 senaryo · sis/kar için karanlık kanal kapılı iyileştirme</li>
+            </ul>
+          </article>
+          <article class="task panel">
+            <p class="panel-k mono" data-i18n="vx.t3k">GÖREV 3</p>
+            <h3 data-i18n="vx.t3t">Referans Nesne Tespiti (örnek düzeyinde eşleştirme)</h3>
+            <div class="delta"><span class="from" data-n="0.23" data-dec="2">0,23</span><span class="arr">→</span><span class="to" data-n="0.86" data-dec="2">0,86</span><small class="mono">VS1 mAP</small></div>
+            <div class="meter" style="--v:.86;--v0:.23" aria-hidden="true"><s></s><i></i></div>
+            <ul class="bul">
+              <li data-i18n="vx.t3a">Dört kanal: OWLv2 nesnelik, DINOv3 görünüş, yoğun-DINO kapsama, DISK + LightGlue geometri</li>
+              <li data-i18n="vx.t3b">"Kapılı müdahale": kanallar tek skora toplanmaz, yalnızca koşulu sağlandığında devreye girer</li>
+              <li data-i18n="vx.t3c">VS4: <b>0,16 → 0,71</b> · Görev 1 kutularıyla ek maliyetsiz konum düzeltme: +0,055 mAP</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="tech-row">
+          <div class="panel classap">
+            <p class="panel-k mono" data-i18n="vx.apK">GÖREV 1 · SINIF BAZINDA AP@0,5</p>
+            <p class="dim-note" data-i18n="vx.apD">Bağımsız 2.250 karelik 4K doğrulama uçuşu · UAP: uçan araba park alanı · UAİ: uçan ambulans iniş alanı</p>
+            <div class="ap-row"><span data-i18n="vx.ap1">UAİ</span><div class="meter" style="--v:.959" aria-hidden="true"><i></i></div><b class="mono" data-n="0.959" data-dec="3">0,959</b></div>
+            <div class="ap-row"><span data-i18n="vx.ap2">UAP</span><div class="meter" style="--v:.954" aria-hidden="true"><i></i></div><b class="mono" data-n="0.954" data-dec="3">0,954</b></div>
+            <div class="ap-row"><span data-i18n="vx.ap3">Taşıt</span><div class="meter" style="--v:.889" aria-hidden="true"><i></i></div><b class="mono" data-n="0.889" data-dec="3">0,889</b></div>
+            <div class="ap-row"><span data-i18n="vx.ap4">İnsan</span><div class="meter" style="--v:.678" aria-hidden="true"><i></i></div><b class="mono" data-n="0.678" data-dec="3">0,678</b></div>
+          </div>
+          <div class="contrib">
+            <div class="panel"><p class="panel-k mono" data-i18n="vx.e1k">DONANIM TAŞIMA</p><p data-i18n="vx.e1">Araştırma kodu olan DPVO, o tarihte desteklenmeyen RTX 5070 Ti (Blackwell) mimarisine <b>42 satırlık</b> hedefli bir değişiklikle taşındı: <b>8 kat</b> hızlandı, sadakat testlerinde fark yalnızca %1,2.</p></div>
+            <div class="panel"><p class="panel-k mono" data-i18n="vx.e2k">VERİ KALİTESİ</p><p data-i18n="vx.e2">5.577 karede <b>26.002 kutu</b> elle etiketlendi. Çelişkili etiketli 1.778 kare ayrı havuzda düzeltildi; UAP/UAİ sınıflarında 0,95+ AP'nin ana nedeni bu karar oldu.</p></div>
+            <div class="panel"><p class="panel-k mono" data-i18n="vx.e3k">KENDİNİ DENETLEYEN HAT</p><p data-i18n="vx.e3">51 mekanizmanın çalışma anında etkin olduğunu doğrulayan, süre bütçesini izleyen ve hatalı konfigürasyonu engelleyen denetim katmanı.</p></div>
+            <div class="panel"><p class="panel-k mono" data-i18n="vx.e4k">GÖREVLER ARASI BAĞ</p><p data-i18n="vx.e4">Görev 3, Görev 1'in ürettiği kutuları yeniden kullanarak ek maliyet olmadan doğruluk kazandı.</p></div>
+          </div>
+        </div>
+
+        <ul class="chips stack-row" aria-label="VectorX teknolojileri">
+          <li class="hot">Python</li><li class="hot">PyTorch</li><li>Ultralytics YOLO11</li><li>ByteTrack</li><li>DPVO</li><li>OWLv2</li><li>DINOv3</li><li>DISK + LightGlue</li><li>OpenCV</li><li>CUDA</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============================== SECURITY / MT-29 ============================== -->
+<section class="section" id="security">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-idx mono" data-b="draw">// 03 · <span data-i18n="sec.idx">MOBİL · BACKEND · GÜVENLİK</span><span class="stamp" aria-hidden="true">@MEG-1453</span></p>
+      <h2 data-b="type" data-i18n="sec.title">MT-29 Chat — <em>güvenlik odaklı iletişim</em></h2>
+      <p class="sec-lead" data-b="draw" data-i18n="sec.lead">Eşler, aileler ve dostlar için; mesajlaşma, sesli/görüntülü arama ve acil durum özelliklerini bir araya getiren güvenlik platformu. Android uygulaması ve kendi sunucumda çalışan backend'iyle sıfırdan, <b>tek geliştirici olarak uçtan uca</b>.</p>
+    </header>
+
+    <div class="tldr" data-b="draw">
+      <p class="tldr-k mono"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg><span data-i18n="tl.k">KISACA · HERKES İÇİN</span></p>
+      <p class="tldr-t" data-i18n="sec.tldr">Aileler ve yakın arkadaşlar için WhatsApp benzeri ama <b>güvenliği ön planda tutan</b> bir uygulama: mesajlaşma, sesli/görüntülü arama, konum paylaşımı ve tehlike anında tek dokunuşla SOS. Telefondaki uygulamayı da arkasındaki sunucuyu da <b>tek başıma</b> yazdım (yaklaşık 7–10 aylık emek). Sonra kendi uygulamama bir saldırgan gibi saldırdım ve bulduğum <b>4 ciddi açığı</b> yayına çıkmadan kapattım.</p>
+    </div>
+
+    <dl class="kpi-row" data-b="group">
+      <div><dt>101</dt><dd data-i18n="sec.k1">Kotlin dosyası (Android)</dd></div>
+      <div><dt>173</dt><dd data-i18n="sec.k2">Java sınıfı (backend)</dd></div>
+      <div><dt>23</dt><dd data-i18n="sec.k3">veritabanı migrasyonu</dd></div>
+      <div><dt>281</dt><dd data-i18n="sec.k4">otomatik güvenlik kontrolü</dd></div>
+      <div><dt>55</dt><dd data-i18n="sec.k5">kütüphane açığı tarandı ve kapatıldı</dd></div>
+    </dl>
+
+    <p class="anno-line anno-sec" data-anno aria-hidden="true"><span class="hand" data-i18n="an.sec">kendi uygulamamı saldırgan gözüyle test ettim</span><svg class="mark mark-down" viewBox="0 0 50 50"><path pathLength="1" d="M6 6 C30 6 40 18 36 42 M27 33 L36 44 L44 32"/></svg></p>
+    <div class="sec-grid">
+      <div class="audit" data-b="draw">
+        <div class="term-bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="term-title mono">audit — mt29</span>
+          <span class="au-count mono" id="au-count">281<small>/281 PASS</small></span>
+        </div>
+        <div class="au-bar" aria-hidden="true"><i id="au-bar"></i></div>
+        <div class="audit-body mono" id="audit-body">
+          <p class="cmd"><span class="g">$</span> <span data-type="cmd">./audit --live --checks=281 --target=mt29-prod-copy</span></p>
+          <div class="au-stream" id="au-stream" aria-hidden="true"></div>
+          <p class="t-dim" data-i18n="sec.auH">Kendi güvenlik denetimimde bulup kapattığım açıklar:</p>
+          <div class="finding">
+            <span class="sev crit" data-i18n="sec.crit">KRİTİK</span>
+            <div><b data-i18n="sec.f1t">WebSocket dinleme</b><p data-i18n="sec.f1d">Giriş yapmış biri başkasının canlı kanalına abone olabiliyordu.</p><p class="fix"><span class="g">fix →</span> <span data-i18n="sec.f1f">STOMP SUBSCRIBE/SEND yetki kontrolü</span></p></div>
+            <span class="ok">[FIXED]</span>
+          </div>
+          <div class="finding">
+            <span class="sev crit" data-i18n="sec.crit">KRİTİK</span>
+            <div><b data-i18n="sec.f2t">MQTT kimlik sahteciliği</b><p data-i18n="sec.f2d">Bir cihaz başkası adına konum/pil yayınlayabiliyordu.</p><p class="fix"><span class="g">fix →</span> <span data-i18n="sec.f2f">topic sahibi = cihaz sahibi kontrolü + hız sınırı</span></p></div>
+            <span class="ok">[FIXED]</span>
+          </div>
+          <div class="finding">
+            <span class="sev crit" data-i18n="sec.crit">KRİTİK</span>
+            <div><b data-i18n="sec.f3t">Davet kodu deneme saldırısı</b><p data-i18n="sec.f3d">6 haneli kod sınırsız denenebiliyordu.</p><p class="fix"><span class="g">fix →</span> <span data-i18n="sec.f3f">8 hane, 7 gün geçerlilik, yönetici onayı, saatte 10 deneme</span></p></div>
+            <span class="ok">[FIXED]</span>
+          </div>
+          <div class="finding">
+            <span class="sev high" data-i18n="sec.high">YÜKSEK</span>
+            <div><b data-i18n="sec.f4t">Kullanıcı numaralandırma</b><p data-i18n="sec.f4d">Aramada herkesin e-postası listeleniyordu.</p><p class="fix"><span class="g">fix →</span> <span data-i18n="sec.f4f">yalnızca tam e-posta/telefon eşleşmesi</span></p></div>
+            <span class="ok">[FIXED]</span>
+          </div>
+          <p class="sum"><span class="g">✓</span> <span data-i18n="sec.sum">4/4 açık kapatıldı · 281/281 kontrol geçti · canlının kopyası üzerinde test</span></p>
+        </div>
+      </div>
+
+      <div class="arch panel" data-b="draw">
+        <p class="panel-k mono" data-i18n="sec.archK">MİMARİ</p>
+        <p class="ng-k mono" data-i18n="sec.cli">ANDROİD İSTEMCİ</p>
+        <div class="arch-row">
+          <div class="node"><b>Kotlin · Compose</b><span>Material 3, Navigation, Coroutines</span></div>
+          <div class="node"><b data-i18n="sec.net">Ağ</b><span>Retrofit / OkHttp · HiveMQ MQTT · WebRTC</span></div>
+          <div class="node"><b data-i18n="sec.secT">Güvenlik</b><span>Google Tink · Keystore · Biometric</span></div>
+        </div>
+        <div class="link link-h mono" aria-hidden="true"><i>⇅</i><span>HTTPS · MQTT · WebRTC</span></div>
+        <p class="ng-k mono" data-i18n="sec.srv">SUNUCU · DOCKER COMPOSE (5 SERVİS)</p>
+        <div class="arch-row arch-row-2">
+          <div class="node"><b>Spring Boot API</b><span>Java 21 · REST + STOMP · JWT · Flyway</span></div>
+          <div class="node"><b>EMQX 5 (MQTT)</b><span data-i18n="sec.emqx">Anlık mesaj, konum, SOS · kimlik doğrulama + ACL</span></div>
+          <div class="node"><b>PostgreSQL 16</b><span data-i18n="sec.pg">AES-256-GCM ile şifreli alanlar</span></div>
+          <div class="node"><b>Redis 7</b><span data-i18n="sec.redis">Hız sınırı, oturum önbelleği</span></div>
+          <div class="node wide"><b>Coturn</b><span data-i18n="sec.turn">STUN/TURN — NAT arkasındaki telefonlar arasında sesli/görüntülü arama</span></div>
+        </div>
+        <div class="arch-row arch-row-2 arch-foot">
+          <div class="node node-src"><b>Firebase Cloud Messaging</b><span data-i18n="sec.fcm">Bildirim içeriği HPKE / X25519 ile şifreli gider; Google içeriği göremez.</span></div>
+          <div class="node"><b>Caddy</b><span data-i18n="sec.caddy">Otomatik HTTPS, tek açık kapı; veritabanı ve paneller dışarıya kapalı.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="defs" data-b="group">
+      <li class="panel"><span class="tag mono">AES-256</span><h3 data-i18n="sec.d1t">Sunucuda şifreli veri</h3><p data-i18n="sec.d1">Mesaj, not, fotoğraf ve sağlık kartı AES-256-GCM ile saklanır.</p></li>
+      <li class="panel"><span class="tag mono">E2E</span><h3 data-i18n="sec.d2t">Uçtan uca şifreli bildirim</h3><p data-i18n="sec.d2">HPKE / X25519 ile yalnızca alıcı cihaz çözebilir.</p></li>
+      <li class="panel"><span class="tag mono">JWT</span><h3 data-i18n="sec.d3t">Oturum güvenliği</h3><p data-i18n="sec.d3">15 dk erişim anahtarı, her yenilemede dönen refresh token; tekrar kullanılırsa oturum iptal.</p></li>
+      <li class="panel"><span class="tag mono">RATE</span><h3 data-i18n="sec.d4t">Kaba kuvvete karşı</h3><p data-i18n="sec.d4">Güvenilir proxy listesi, kademeli hesap kilidi, kullanıcı başına hız sınırı.</p></li>
+      <li class="panel"><span class="tag mono">PIN</span><h3 data-i18n="sec.d5t">Uygulama kilidi + tehlike PIN'i</h3><p data-i18n="sec.d5">Biyometrik/PIN kilit (PBKDF2). Zorla açtırılırsa yakınlara sessiz SOS.</p></li>
+      <li class="panel"><span class="tag mono">WIPE</span><h3 data-i18n="sec.d6t">Kayıp telefon &amp; uzaktan silme</h3><p data-i18n="sec.d6">Yeni girişlere cihaz onayı, "kayboldu" modu, uzaktan veri silme.</p></li>
+      <li class="panel"><span class="tag mono">CAP</span><h3 data-i18n="sec.d7t">Sertleştirilmiş konteynerler</h3><p data-i18n="sec.d7">cap_drop ALL, no-new-privileges; veritabanı ve paneller yalnızca localhost'ta.</p></li>
+      <li class="panel"><span class="tag mono">BAK</span><h3 data-i18n="sec.d8t">Şifreli yedek + test ortamı</h3><p data-i18n="sec.d8">Bütünlük imzalı yedekler; canlının kopyası üzerinde 281 kontrol.</p></li>
+    </ul>
+
+    <div class="feats panel" data-b="draw">
+      <div>
+        <p class="panel-k mono" data-i18n="sec.fK">ÖZELLİKLER</p>
+        <ul class="bul feat-list">
+          <li data-i18n="sec.ft1"><b>Mesajlaşma:</b> MQTT ile anlık iletim, ✓ / ✓✓ / okundu, "yazıyor…", fotoğraf ve sesli mesaj, grup sohbetleri</li>
+          <li data-i18n="sec.ft2"><b>Sesli / görüntülü arama:</b> WebRTC + TURN; kilit ekranında tam ekran gelen arama</li>
+          <li data-i18n="sec.ft3"><b>Çemberler:</b> eş, aile ve arkadaşlar için ayrı gruplar; konum, pil, SOS paylaşımı her çemberde ayrı izinle</li>
+          <li data-i18n="sec.ft4"><b>Acil durum:</b> 5 sn geri sayımlı SOS ve canlı konum, internet yoksa SMS'e düşme, düşme algılama, "Herkes iyi mi?"</li>
+          <li data-i18n="sec.ft5"><b>Etkileşim:</b> kilit ekranına not/çizim gönderme ve gerçek zamanlı çizim-tahmin oyunu "Çiz-Bil"</li>
+        </ul>
+      </div>
+      <a class="btn" href="https://github.com/MEG-1453/mt-29-chat" target="_blank" rel="noopener"><span data-i18n="sec.repo">GitHub vitrini</span> <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== PROJECTS ============================== -->
+<section class="section" id="projects">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-idx mono" data-b="draw">// 04 · <span data-i18n="pr.idx">DİĞER PROJELER</span><span class="stamp" aria-hidden="true">@MEG-1453</span></p>
+      <h2 data-b="type" data-i18n="pr.title">Yapay zekâ araçlarından <em>akıllı şehre</em></h2>
+    </header>
+
+    <article class="feature panel" id="ai-control" data-live>
+      <div class="feature-copy" data-b="draw">
+        <p class="panel-k mono" data-i18n="pr.a.k">YAPAY ZEKÂ ARAÇLARI · CLAUDE CODE · AKTİF GELİŞTİRME</p>
+        <div class="title-row"><h3>AI Control</h3><span class="hand anno-now" data-anno aria-hidden="true" data-i18n="an.now">şu an bunun üzerinde çalışıyorum</span></div>
+        <p class="proj-sub" data-i18n="pr.a.s">Claude Code için uzaktan kontrol ve kalıcı hafıza</p>
+        <p class="plain" data-i18n="pr.a.p"><b>Kısaca:</b> Yapay zekâ kodlama asistanı Claude ile çalışırken, bilgisayar başında olmasam da telefondan kontrol edebilmemi ve asistanın önemli kararları unutmamasını sağlayan kendi aracım.</p>
+        <p data-i18n="pr.a.d">Claude Code oturumlarını telefondan, PC'den ve VS Code'dan <b>aynı canlı terminal</b> üzerinden yöneten, tamamen kendi bilgisayarında çalışan sistem. Komut ezberi yok: "kaydet", "şunu unut", "hafızayı geçen haftaki haline döndür" demek yeterli; yalnızca <b>onaylanan</b> bilgi okunur Markdown ve yerel git geçmişiyle kalıcı hafızaya yazılır.</p>
+        <ul class="bul">
+          <li data-i18n="pr.a.f1"><b>Kalıcı hafıza (MCP):</b> 9 araçlı hafıza sunucusu (ara, oku, önizle, kaydet, unut, zaman makinesi); Markdown kasa + tam metin indeks, çelişki dedektörü, gizli bilgi kalkanı</li>
+          <li data-i18n="pr.a.f2"><b>Telefondan yönetim:</b> Android / iPhone PWA ile oturum aç, onay ver, terminali canlı izle; Tailscale özel ağı + Tailnet Lock, açık port yok</li>
+          <li data-i18n="pr.a.f3"><b>Güvenlik önce:</b> cihaz eşleştirme, WebAuthn ekran kilidi (desen / Face ID), denetim kaydı, yayın kilidi, tam erişim modu kilitli</li>
+          <li data-i18n="pr.a.f4"><b>Hiçbir şey kaybolmaz:</b> oturum yalnızca /exit ile biter; PC kapansa da kaldığı yerden açılır</li>
+        </ul>
+        <ul class="chips"><li class="hot">Node.js 22</li><li class="hot">MCP</li><li>node-pty · ConPTY</li><li>WebSocket</li><li>xterm.js</li><li>Preact + Vite</li><li>WebAuthn</li><li>Tailscale</li><li>VS Code API</li><li>Apache-2.0</li></ul>
+      </div>
+      <div class="feature-side">
+        <div class="mem-demo" data-b="scan">
+          <div class="term-bar">
+            <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="term-title mono" data-i18n="pr.a.mT">claude · hafıza (örnek akış)</span>
+            <span class="term-state mono"><i aria-hidden="true"></i>mcp</span>
+          </div>
+          <div class="mem-body mono">
+            <p style="--i:0"><span class="t-dim" data-i18n="pr.a.you">sen ›</span> <span data-i18n="pr.a.m1">bitirmeden kaydedilecek bir şey var mı?</span></p>
+            <p style="--i:1"><span class="t-c">claude ›</span> hafiza_ara → hafiza_onizle</p>
+            <p style="--i:2" class="t-dim" data-i18n="pr.a.m2">  1. Ağ erişimi: Tailscale + Tailnet Lock</p>
+            <p style="--i:3" class="t-dim" data-i18n="pr.a.m3">  2. Proje: AI_Control · Node 22 · node-pty</p>
+            <p style="--i:4" class="t-dim" data-i18n="pr.a.m4">  3. Görev: macOS / Linux desteği (açık)</p>
+            <p style="--i:5"><span class="t-c">claude ›</span> <span data-i18n="pr.a.m5">Hepsini mi kaydedeyim, hangilerini (ör. 1 3)?</span></p>
+            <p style="--i:6"><span class="t-dim" data-i18n="pr.a.you">sen ›</span> 1 3</p>
+            <p style="--i:7"><span class="t-ok">✓</span> <span data-i18n="pr.a.m6">hafiza_kaydet · 2 kayıt · yerel git geçmişine işlendi</span></p>
+          </div>
+        </div>
+        <dl class="feature-stats" data-b="group">
+          <div><dt>9</dt><dd data-i18n="pr.a.s1">MCP hafıza aracı</dd></div>
+          <div><dt>73</dt><dd data-i18n="pr.a.s2">otomatik test</dd></div>
+          <div><dt data-i18n="pr.a.s3v">~6,3K</dt><dd data-i18n="pr.a.s3">satır kod</dd></div>
+          <div><dt>4</dt><dd data-i18n="pr.a.s4">çalışma bağımlılığı</dd></div>
+        </dl>
+        <p class="soon mono" data-b="draw"><span class="g">●</span> <span data-i18n="pr.a.soon">Açık kaynak (Apache-2.0) olarak yayına hazırlanıyor</span></p>
+      </div>
+    </article>
+
+    <div class="proj-grid" data-b="group">
+      <article class="proj panel">
+        <p class="panel-k mono" data-i18n="pr.j.k">ROBOTİK · DAĞITIK SİSTEMLER · v1.0 → v3.0</p>
+        <h3>Jarvis</h3>
+        <p class="proj-sub" data-i18n="pr.j.s">Edge-to-Cloud robotik cihaz orkestrasyonu</p>
+        <p class="plain" data-i18n="pr.j.p"><b>Kısaca:</b> Sahadaki robotları tek bir merkezden, internet üzerinden izleyip yönetmeye yarayan sistem.</p>
+        <p data-i18n="pr.j.d">ROS 2 tabanlı otonom cihazların, bulutta çalışan Spring Boot backend'i üzerinden merkezi olarak izlenip yönetilmesi için tasarladığım mimari. Üç ana sürümde geliştirdim.</p>
+        <div class="mini-flow mono" aria-hidden="true"><span>ROS 2 edge</span><i>⇄</i><span>Spring Boot</span><i>⇄</i><span>PostgreSQL</span></div>
+        <ul class="chips"><li class="hot">ROS 2</li><li class="hot">Spring Boot</li><li>K3s</li><li>Docker</li><li>PostgreSQL</li><li>OpenCV</li></ul>
+        <button class="proj-cta mono" type="button" data-cmd="jarvis jarvis nedir"><span class="g">&gt;</span> <span data-i18n="pr.ask">terminalde sor</span></button>
+      </article>
+
+      <article class="proj panel">
+        <p class="panel-k mono" data-i18n="pr.e.k">AKILLI ŞEHİR · FINTECH · FULL-STACK</p>
+        <h3>EsenLink</h3>
+        <p class="proj-sub" data-i18n="pr.e.s">Akıllı şehir gençlik FinTech ekosistemi</p>
+        <p class="plain" data-i18n="pr.e.p"><b>Kısaca:</b> Gençlerin mahalle esnafından iş alıp ücretini güvenle alabildiği, belediyenin de süreci takip ettiği bir platform.</p>
+        <p data-i18n="pr.e.d">Gençleri, esnafı ve belediyeyi aynı platformda buluşturan görev ve ödeme ekosistemi: e-Devlet girişi (mock), güvenli havuz (escrow), adil ücret hesaplama, teşvik puanları, belediye yönetim paneli ve <b>yapay zekâ destekli dolandırıcılık tespiti</b>.</p>
+        <div class="mini-flow mono" aria-hidden="true"><span>Next.js 14</span><i>⇄</i><span>NestJS + Prisma</span><i>⇄</i><span>PG · Redis · MinIO</span></div>
+        <ul class="chips"><li class="hot">TypeScript</li><li class="hot">NestJS</li><li>Next.js 14</li><li>Prisma</li><li>PostgreSQL 16</li><li>Redis 7</li><li>MinIO</li><li>Swagger</li></ul>
+        <a class="proj-cta mono" href="https://github.com/MEG-1453/EsenlerV1" target="_blank" rel="noopener"><span class="g">&gt;</span> github.com/MEG-1453/EsenlerV1 <span aria-hidden="true">↗</span></a>
+      </article>
+
+      <article class="proj panel">
+        <p class="panel-k mono" data-i18n="pr.r.k">FULL-STACK · LLM ENTEGRASYONU</p>
+        <h3>Regulator</h3>
+        <p class="proj-sub" data-i18n="pr.r.s">Yapay zekâ destekli kişisel finans yönetimi</p>
+        <p class="plain" data-i18n="pr.r.p"><b>Kısaca:</b> Harcamanı günlük bir cümleyle yazdığında kendisi anlayıp kaydeden, "taksitle araba alırsam ne olur?" gibi sorulara cevap veren kişisel finans asistanı.</p>
+        <p data-i18n="pr.r.d">Gelir-gider, abonelik ve periyodik ödemeleri tek yerden takip eden web uygulaması. LLM motoru yapılandırmayla yerel (Ollama) ya da bulut (OpenAI, Gemini) arasında değiştirilebiliyor; finansal simülasyon ve sohbet hafızalı danışman içeriyor.</p>
+        <div class="nl-demo mono">
+          <p><span class="g">›</span> <span data-i18n="pr.r.q">"Dün Migros'tan kartla 450 TL alışveriş yaptım"</span></p>
+          <p class="t-dim" data-i18n="pr.r.a">→ tutar 450 TL · yer Migros · ödeme kart · tarih dün</p>
+        </div>
+        <ul class="chips"><li class="hot">Java 21</li><li class="hot">Spring Boot</li><li>Next.js 14</li><li>TypeScript</li><li>Ollama / OpenAI / Gemini</li></ul>
+      </article>
+
+      <article class="proj panel">
+        <p class="panel-k mono" data-i18n="pr.s.k">2024 · JAVA · İLK BACKEND'İM</p>
+        <h3>Social Backend</h3>
+        <p class="proj-sub" data-i18n="pr.s.s">Sosyal medya platformu · Spring Boot + React</p>
+        <p class="plain" data-i18n="pr.s.p"><b>Kısaca:</b> Facebook benzeri bir sosyal ağın arka planda çalışan sunucu tarafı; Java ile yazdığım ilk backend.</p>
+        <p data-i18n="pr.s.d">Java ile yazdığım ilk backend: Facebook benzeri bir platformun REST API'si. Kullanıcı, gönderi, yorum ve beğeni akışlarını; <b>JWT tabanlı Spring Security</b> (filtre, token sağlayıcı, entry point), DTO katmanı ve global hata yönetimiyle katmanlı mimaride kurdum. Arayüzü React ile tek sayfalık uygulama olarak bağladım.</p>
+        <div class="mini-flow mono" aria-hidden="true"><span>Controller</span><i>→</i><span>Service</span><i>→</i><span>Repository</span><i>→</i><span>JPA</span></div>
+        <ul class="chips"><li class="hot">Java</li><li class="hot">Spring Boot</li><li>Spring Security · JWT</li><li>Spring Data JPA</li><li>REST API</li><li>React</li></ul>
+        <a class="proj-cta mono" href="https://github.com/MEG-1453/Spring_Projects/tree/main/social-backend" target="_blank" rel="noopener"><span class="g">&gt;</span> Spring_Projects/social-backend <span aria-hidden="true">↗</span></a>
+      </article>
+    </div>
+
+    <div class="lab-head" data-b="draw">
+      <p class="panel-k mono" data-i18n="pr.lab.k">GITHUB LABORATUVARI</p>
+      <p data-i18n="pr.lab.d">Açık kaynak denemelerim, güvenlik araçlarım ve gömülü sistem çalışmalarım.</p>
+      <a class="btn btn-sm" href="https://github.com/MEG-1453?tab=repositories" target="_blank" rel="noopener">github.com/MEG-1453 <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="lab-grid" data-b="group">
+      <a class="repo panel" href="https://github.com/MEG-1453/Security_Projects" target="_blank" rel="noopener">
+        <span class="repo-top mono"><span class="g">◆</span> Security_Projects <i class="lang-dot" style="--lc:#3572A5"></i>Python</span>
+        <b>MEG-1453 Recon</b>
+        <span data-i18n="pr.lab.sec">Asenkron (asyncio / aiohttp) ağ güvenliği ve keşif çatısı; renkli log ve rapor çıktısı. Yalnızca yetkili lab ortamları için.</span>
+      </a>
+      <a class="repo panel" href="https://github.com/MEG-1453/Arduino_ESP32_Projects" target="_blank" rel="noopener">
+        <span class="repo-top mono"><span class="g">◆</span> Arduino_ESP32_Projects <i class="lang-dot" style="--lc:#f34b7d"></i>C++</span>
+        <b>ESP32 Air Mouse</b>
+        <span data-i18n="pr.lab.esp">Hareket sensörüyle havada kontrol edilen fare ve ESP32 deneyleri; sensör kalibrasyonu ve gömülü testler.</span>
+      </a>
+      <a class="repo panel" href="https://github.com/MEG-1453/Travel-Guide-Pro" target="_blank" rel="noopener">
+        <span class="repo-top mono"><span class="g">◆</span> Travel-Guide-Pro <i class="lang-dot" style="--lc:#f1e05a"></i>JavaScript</span>
+        <b>Travel Guide Pro</b>
+        <span data-i18n="pr.lab.tr">Gezilecek yerleri daha hızlı keşfetmeyi ve deneyimleri paylaşmayı sağlayan React + Vite platformu.</span>
+      </a>
+      <a class="repo panel" href="https://github.com/MEG-1453/Embadded_Systems_Tryig" target="_blank" rel="noopener">
+        <span class="repo-top mono"><span class="g">◆</span> Embadded_Systems_Tryig <i class="lang-dot" style="--lc:#f34b7d"></i>C++</span>
+        <b data-i18n="pr.lab.embT">Gömülü Sistemler</b>
+        <span data-i18n="pr.lab.emb">C++ ve Python ile sensör okuma, kalibrasyon ve donanım testleri.</span>
+      </a>
+      <a class="repo panel" href="https://github.com/MEG-1453/My-Hobbies-Lab" target="_blank" rel="noopener">
+        <span class="repo-top mono"><span class="g">◆</span> My-Hobbies-Lab <i class="lang-dot" style="--lc:#563d7c"></i>CSS</span>
+        <b>Hobbies Lab</b>
+        <span data-i18n="pr.lab.hob">Kişisel Ar-Ge laboratuvarım: React.js öğrenme yolculuğu ve STM32 / ESP32 deneyleri.</span>
+      </a>
+      <a class="repo panel" href="https://github.com/MEG-1453/mt-29-chat" target="_blank" rel="noopener">
+        <span class="repo-top mono"><span class="g">◆</span> mt-29-chat <i class="lang-dot" style="--lc:#A97BFF"></i>Kotlin</span>
+        <b data-i18n="pr.lab.mtT">MT-29 Chat · vitrin</b>
+        <span data-i18n="pr.lab.mt">Uygulamanın tanıtımı ve tasarımı; kaynak kod özel tutuluyor.</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SKILLS ============================== -->
+<section class="section" id="skills">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-idx mono" data-b="draw">// 05 · <span data-i18n="sk.idx">YETKİNLİKLER</span><span class="stamp" aria-hidden="true">@MEG-1453</span></p>
+      <h2 data-b="type" data-i18n="sk.title">Araç <em>kutusu</em></h2>
+    </header>
+    <div class="panel chart-box chart-wide" data-b="draw">
+      <p class="panel-k mono" data-i18n="ch.arK">PROJELERİN DAĞILIMI</p>
+      <h3 class="chart-t" data-i18n="ch.arT">Hangi alanda kaç projem var?</h3>
+      <p class="chart-s" data-i18n="ch.arS">Bu sayfadaki 12 projenin dokunduğu alanlar. Bir proje birden çok alanda sayılabilir.</p>
+      <div class="cv" id="chart-areas"></div>
+    </div>
+    <div class="skill-grid" data-b="group">
+      <div class="skill panel"><p class="sk-h mono" data-type="cmd"><span class="g">$</span> ls ./<span data-i18n="sk.c1">diller</span></p><ul class="chips"><li class="hot">Python</li><li class="hot">Java</li><li>Kotlin</li><li>C++</li><li>JavaScript / TypeScript</li><li>SQL</li></ul></div>
+      <div class="skill panel"><p class="sk-h mono" data-type="cmd"><span class="g">$</span> ls ./<span data-i18n="sk.c2">yapay-zeka</span></p><ul class="chips"><li class="hot">PyTorch</li><li class="hot">YOLO11 / YOLOv8</li><li>OpenCV</li><li>ByteTrack</li><li>DPVO</li><li>OWLv2</li><li>DINOv3</li><li>LightGlue</li><li>Ollama</li></ul></div>
+      <div class="skill panel"><p class="sk-h mono" data-type="cmd"><span class="g">$</span> ls ./backend</p><ul class="chips"><li class="hot">Spring Boot</li><li>Spring Security / JWT</li><li>NestJS</li><li>REST</li><li>PostgreSQL</li><li>Redis</li><li>MQTT (EMQX)</li><li class="hot">Docker</li><li>K3s</li></ul></div>
+      <div class="skill panel"><p class="sk-h mono" data-type="cmd"><span class="g">$</span> ls ./<span data-i18n="sk.c4">mobil-web</span></p><ul class="chips"><li class="hot">Android · Compose</li><li>WebRTC</li><li>FCM</li><li class="hot">React</li><li>Next.js</li><li>TailwindCSS</li></ul></div>
+      <div class="skill panel"><p class="sk-h mono" data-type="cmd"><span class="g">$</span> ls ./<span data-i18n="sk.c5">robotik-gomulu</span></p><ul class="chips"><li class="hot">ROS 2</li><li>ESP32</li><li>STM32</li><li>PID</li><li>SLAM</li><li>SolidWorks</li></ul></div>
+      <div class="skill panel"><p class="sk-h mono" data-type="cmd"><span class="g">$</span> ls ./<span data-i18n="sk.c6">guvenlik-araclar</span></p><ul class="chips"><li class="hot">Kali Linux</li><li>Ubuntu</li><li>Git</li><li>Google Tink</li><li>OWASP</li><li>IntelliJ IDEA</li><li>VS Code</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== EXPERIENCE ============================== -->
+<section class="section" id="experience">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-idx mono" data-b="draw">// 06 · <span data-i18n="ex.idx">DENEYİM · LİDERLİK · EĞİTİM</span><span class="stamp" aria-hidden="true">@MEG-1453</span></p>
+      <h2 data-b="type" data-i18n="ex.title">Sahada ve <em>takımda</em></h2>
+    </header>
+    <p class="gitlog mono" data-b="draw"><span class="g">meg-1453@portfolio:~$</span> <span data-type="cmd">git log --kariyer --graph</span></p>
+    <div class="panel chart-box chart-wide" data-b="draw">
+      <p class="panel-k mono" data-i18n="ch.tlK">KARİYER GRAFİĞİ · git log --graph</p>
+      <h3 class="chart-t" data-i18n="ch.tlT">Okul, takım ve saha aynı anda</h3>
+      <p class="chart-s" data-i18n="ch.tlS">Ana hat üniversitem; ondan ayrılan dallar aynı anda yürüttüğüm görevler. Halkalar tek seferlik etkinlikler, parlayan halka derece. Üzerine gelince ayrıntısı açılır.</p>
+      <div class="cv" id="chart-time"></div>
+    </div>
+    <div class="exp-grid">
+      <ol class="timeline">
+        <li data-b="draw"><span class="hash mono">commit <b>a3f91e2</b> <em>(HEAD -&gt; main)</em></span><time class="mono" data-i18n="ex.1d">Ağu 2026 – Devam</time><h3 data-i18n="ex.1t">Üniversite İlişkileri Temsilcisi</h3><p class="org" data-i18n="ex.1o">T3 Vakfı / TEKNOFEST İstanbul İl Koordinatörlüğü</p><p data-i18n="ex.1p">Üniversite ilişkilerini koordine ediyor; öğrenci kulüpleriyle vakıf arasındaki iletişimi ve TEKNOFEST organizasyon süreçlerini destekliyorum.</p></li>
+        <li data-b="draw" class="hl"><span class="hash mono">commit <b>7c0d4b9</b></span><time class="mono">2026</time><h3 data-i18n="ex.2t">Türkiye 3.'sü — TEKNOFEST Havacılıkta Yapay Zekâ</h3><p class="org" data-i18n="ex.2o">VectorX · Takım Kaptanı &amp; AI Geliştiricisi</p><p data-i18n="ex.2p">5 kişilik ekibin teknik yönünü belirledim: hangi yapay zekâ modelinin kullanılacağına karar verdim, eğitim-test döngüsünü ve teknik raporlamayı yürüttüm. Sonuç: Türkiye 3.'lüğü.</p></li>
+        <li data-b="draw"><span class="hash mono">commit <b>4b8e1d6</b></span><time class="mono" data-i18n="ex.3d">Mar 2026</time><h3 data-i18n="ex.3t">Milli Teknoloji Zirvesi</h3><p class="org" data-i18n="ex.3o">Nişantaşı Üniversitesi &amp; T3 Vakfı / TEKNOFEST</p><p data-i18n="ex.3p">Yerli Savunma Ekosisteminin Geleceği</p></li>
+        <li data-b="draw"><span class="hash mono">commit <b>5e2a7f0</b></span><time class="mono" data-i18n="ex.4d">Eki 2025 – Devam</time><h3 data-i18n="ex.4t">Yönetim Kurulu Üyesi (Projeler ve Yarışmalar)</h3><p class="org" data-i18n="ex.4o">Nişantaşı Üniversitesi TEKNOFEST Kulübü</p><p data-i18n="ex.4p">Çelikkubbe hava savunma, insansız kara aracı ve blokzincir dikeylerinde takım kurulumu, teknik koordinasyon ve raporlama desteği.</p></li>
+        <li data-b="draw"><span class="hash mono">commit <b>39bd1c4</b></span><time class="mono" data-i18n="ex.5d">Eki – Ara 2025 · Eki 2026 – Devam</time><h3 data-i18n="ex.5t">Siber Vatan Programı / Hackviser CTF</h3><p class="org" data-i18n="ex.part">Katılımcı</p><p data-i18n="ex.5p">Siber güvenlik eğitim programı; gerçek saldırı senaryolarını çözdüğümüz CTF görevleri. MT-29'daki güvenlik denetiminin temeli burada atıldı. Ekim 2026'da programa yeniden başladım.</p></li>
+        <li data-b="draw"><span class="hash mono">commit <b>2d7a0c5</b></span><time class="mono" data-i18n="ex.6d">Eki 2025</time><h3>Talentcoders CodeSprint</h3><p class="org" data-i18n="ex.part">Katılımcı</p></li>
+        <li data-b="draw"><span class="hash mono">commit <b>0f1e8a3</b></span><time class="mono" data-i18n="ex.7d">2023 – 2028 (beklenen)</time><h3 data-i18n="ex.7t">Yazılım Mühendisliği (İngilizce)</h3><p class="org" data-i18n="ex.7o">Nişantaşı Üniversitesi · 3. sınıf</p></li>
+      </ol>
+      <aside class="exp-side">
+        <div class="panel" data-b="draw">
+          <p class="panel-k mono" data-i18n="ex.langK">DİLLER</p>
+          <div class="lang-row"><span data-i18n="ex.en">İngilizce</span><div class="meter" style="--v:.72" aria-hidden="true"><i></i></div><b class="mono">B2</b></div>
+          <div class="lang-row"><span data-i18n="ex.ar">Arapça</span><div class="meter" style="--v:.3" aria-hidden="true"><i></i></div><b class="mono">A2</b></div>
+          <div class="lang-row"><span data-i18n="ex.tr">Türkçe</span><div class="meter" style="--v:1" aria-hidden="true"><i></i></div><b class="mono" data-i18n="ex.native">ana dil</b></div>
+        </div>
+        <div class="panel" data-b="draw">
+          <p class="panel-k mono" data-i18n="ex.intK">İLGİ ALANLARI</p>
+          <ul class="bul">
+            <li data-i18n="ex.i1">Savunma teknolojilerinde girişimcilik</li>
+            <li data-i18n="ex.i2">Otonom sistemler ve robotik</li>
+            <li data-i18n="ex.i3">Gömülü donanım, elektronik devre ve 3D tasarım/üretim</li>
+            <li data-i18n="ex.i4">Anlayarak hızlı okuma — dakikada 700 kelime</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CONTACT ============================== -->
+<section class="section" id="contact">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-idx mono" data-b="draw">// 07 · <span data-i18n="ct.idx">İLETİŞİM</span><span class="stamp" aria-hidden="true">@MEG-1453</span></p>
+      <h2 data-b="type" data-i18n="ct.title">Haberleşme hattı <em>açık.</em></h2>
+      <p class="sec-lead" data-b="draw" data-i18n="ct.lead">Proje, staj ve iş birlikleri için yazabilirsin. Kaynak kodlar, demo videoları ve teknik raporlar talep üzerine paylaşılabilir.</p>
+    </header>
+    <div class="contact-grid">
+      <div class="contact-card panel" data-b="draw" data-live>
+        <p class="cmd mono" data-type="cmd"><span class="g">$</span> ./connect --user=MEG-1453 --birlikte-calisalim</p>
+        <div class="c-row">
+          <span class="c-k mono">email</span>
+          <a class="c-v" href="mailto:muhammetemingenc679@gmail.com">muhammetemingenc679@gmail.com</a>
+          <button class="c-copy mono" type="button" data-copy="muhammetemingenc679@gmail.com" data-i18n="ct.copy">kopyala</button>
+        </div>
+        <div class="c-row">
+          <span class="c-k mono" data-i18n="ct.phone">telefon</span>
+          <a class="c-v" href="tel:+905335635229">+90 533 563 52 29</a>
+          <button class="c-copy mono" type="button" data-copy="+905335635229" data-i18n="ct.copy">kopyala</button>
+        </div>
+        <div class="c-row">
+          <span class="c-k mono">linkedin</span>
+          <a class="c-v" href="https://www.linkedin.com/in/muhammet-emin-gen%C3%A7-a6797a38b/" target="_blank" rel="noopener">in/muhammet-emin-genç</a>
+          <span class="c-go" aria-hidden="true">↗</span>
+        </div>
+        <div class="c-row">
+          <span class="c-k mono">github</span>
+          <a class="c-v" href="https://github.com/MEG-1453" target="_blank" rel="noopener">github.com/MEG-1453</a>
+          <span class="c-go" aria-hidden="true">↗</span>
+        </div>
+        <div class="c-row">
+          <span class="c-k mono" data-i18n="ct.loc">konum</span>
+          <span class="c-v" data-i18n="sys.loc">İstanbul, Türkiye</span>
+          <span class="c-go g" aria-hidden="true">●</span>
+        </div>
+        <div class="c-actions">
+          <a class="btn btn-primary" href="mailto:muhammetemingenc679@gmail.com"><span data-i18n="ct.mail">E-posta gönder</span> <span aria-hidden="true">→</span></a>
+          <a class="btn" href="https://www.linkedin.com/in/muhammet-emin-gen%C3%A7-a6797a38b/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+          <span class="anno-msg" data-anno aria-hidden="true"><svg class="mark mark-left" viewBox="0 0 80 40"><path pathLength="1" d="M76 22 C58 8 32 8 8 22 M19 12 L7 23 L21 29"/></svg><span class="hand" data-i18n="an.msg">bir mesaj kadar uzağındayım!</span></span>
+        </div>
+      </div>
+      <div class="contact-side">
+        <div class="docs panel" data-b="draw">
+          <p class="panel-k mono" data-i18n="ct.docK">BELGELER</p>
+          <a class="doc" href="assets/cv/Muhammet_Emin_Genc_CV_TR.pdf" download><span class="doc-i mono">PDF</span><span><b>CV — Türkçe</b><small>90 KB</small></span><span aria-hidden="true">↓</span></a>
+          <a class="doc" href="assets/cv/Muhammet_Emin_Genc_CV_EN.pdf" download><span class="doc-i mono">PDF</span><span><b>CV — English</b><small>87 KB</small></span><span aria-hidden="true">↓</span></a>
+          <a class="doc" href="assets/cv/Muhammet_Emin_Genc_Portfolyo.pdf" target="_blank" rel="noopener"><span class="doc-i mono">PDF</span><span><b data-i18n="ct.port">Portfolyo · 5 sayfa</b><small>543 KB</small></span><span aria-hidden="true">↗</span></a>
+          <div class="docs-foot mono">
+            <p><span class="g">●</span> <span data-i18n="ct.f1">İstanbul, Türkiye · UTC+3</span> · <b id="ct-clock">--:--</b></p>
+            <p><span data-i18n="ct.f2">Diller</span> <b>TR · EN · AR</b></p>
+            <p><span data-i18n="ct.f3">Kullanıcı adı</span> <b>MEG-1453</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Support / Buy me a coffee ===== -->
+    <div class="support" id="support" data-b="draw">
+      <div class="cup" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="64" height="64"><path class="steam" d="M24 14c-3-3 3-5 0-9M33 14c-3-3 3-5 0-9M42 14c-3-3 3-5 0-9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M12 22h38v16a14 14 0 0 1-14 14h-10a14 14 0 0 1-14-14z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M50 26h4a6 6 0 0 1 0 12h-4" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8 58h46" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+      </div>
+      <div class="support-copy">
+        <p class="panel-k mono" data-i18n="sp.k">DESTEK</p>
+        <h3 data-i18n="sp.t">Çalışmalarımı beğendiysen bir kahve ısmarla</h3>
+        <p data-i18n="sp.d">Açık kaynak denemelerim, yarışma projelerim ve bu site gece kahveleriyle büyüyor. Kahve ısmarlamak ya da bir proje hakkında konuşmak istersen WhatsApp'tan ya da e-postayla doğrudan bana yaz.</p>
+        <p class="hand anno-coffee" data-anno aria-hidden="true" data-i18n="an.coffee">her kahve = bir commit</p>
+      </div>
+      <div class="support-actions">
+        <a class="btn btn-primary" id="wa-btn" href="https://wa.me/905335635229?text=Merhaba%20Muhammet%2C%20portfolyonu%20g%C3%B6rd%C3%BCm%20ve%20sana%20bir%20kahve%20%C4%B1smarlamak%20istiyorum%20%E2%98%95" target="_blank" rel="noopener"><svg class="btn-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span data-i18n="sp.wa">WhatsApp'tan yaz</span></a>
+        <a class="btn" id="coffee-btn" href="mailto:muhammetemingenc679@gmail.com?subject=%E2%98%95%20Kahve%20%C4%B1smarlamak%20istiyorum" target="_blank" rel="noopener"><svg class="btn-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" fill="none" stroke="currentColor" stroke-width="2"/></svg><span data-i18n="sp.mail">E-posta gönder</span></a>
+        <a class="btn btn-ghost" href="https://github.com/MEG-1453?tab=repositories" target="_blank" rel="noopener"><span data-i18n="sp.star">GitHub'da yıldız ver</span></a>
+        <button class="btn btn-ghost" type="button" id="share-btn"><span data-i18n="sp.share">Siteyi paylaş</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="outro" aria-hidden="true" data-live>
+  <div class="wrap">
+    <p class="outro-k mono" data-b="draw"><span class="g">●</span> <span data-i18n="ou.k">sistem çevrimiçi · imza</span></p>
+    <p class="outro-name" data-b="type">Muhammet Emin Genç</p>
+    <p class="outro-id mono" data-b="draw"><span class="g">aka</span> MEG-1453 · github.com/MEG-1453 · İstanbul, Türkiye</p>
+  </div>
+</div>
+
+<footer class="foot" data-b="draw">
+  <div class="wrap foot-in mono">
+    <span class="foot-sig"><span class="hand sig" data-anno aria-hidden="true">Muhammet E. Genç</span><span>© 2026 Muhammet Emin Genç · MEG-1453</span></span>
+    <span class="foot-mid" data-i18n="ft.built">Bu sayfa agentlar tarafından inşa edildi · 0 bağımlılık · saf HTML / CSS / JS</span>
+    <span class="foot-act">
+      <button type="button" class="link-btn" data-cmd="build">↻ <span data-i18n="ft.rebuild">yeniden inşa et</span></button>
+      <a href="#hero" data-i18n="ft.top">başa dön ↑</a>
+    </span>
+  </div>
+</footer>
+
+<div class="build-hud mono" id="build-hud" hidden>
+  <span class="hud-spin" aria-hidden="true"></span>
+  <span class="hud-label" id="hud-label">build</span>
+  <span class="hud-count"><b id="hud-n">0</b>/<span id="hud-t">0</span></span>
+  <span class="hud-bar" aria-hidden="true"><i id="hud-bar"></i></span>
+  <span class="hud-hint" id="hud-hint"></span>
+  <button type="button" class="hud-skip" id="hud-skip"><span id="hud-skip-t">atla</span> <kbd>Esc</kbd></button>
+</div>
+<div class="toast mono" id="toast" role="status" aria-live="polite"></div>
+<div id="build-layer" aria-hidden="true"></div>
+</body>
+</html>
