@@ -15,14 +15,16 @@
   var root = document.documentElement;
   var $ = function (s, c) { return (c || document).querySelector(s); };
   var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var lite = root.classList.contains('lite');
+  var isLite = function () { return root.classList.contains('lite'); }; // may switch on at runtime (adaptive quality)
   var lang = function () { return root.getAttribute('data-lang') === 'en' ? 'en' : 'tr'; };
   var x = function (tr, en) { return lang() === 'en' ? en : tr; };
   var sfx = function (n, a) { var S = window.SFX; if (S && S[n]) { try { S[n](a); } catch (e) {} } };
   var raf = function (f) { return requestAnimationFrame(f); };
   var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
   var small = function () { return innerWidth < 760; };
-  var vw = function () { return document.documentElement.clientWidth || innerWidth; }; // excludes the scrollbar
+  // viewport width without the scrollbar — cached: reading clientWidth inside the frame loop forced a full page layout every frame
+  var CW = document.documentElement.clientWidth || innerWidth;
+  var vw = function () { return CW; };
   var seen = {};
   try { seen = JSON.parse(sessionStorage.getItem('meg:jv-seen') || '{}'); } catch (e) {}
   var remember = function (k) { seen[k] = 1; try { sessionStorage.setItem('meg:jv-seen', JSON.stringify(seen)); } catch (e) {} };
@@ -80,6 +82,7 @@
   var GUT = { l: 0, r: 0 }, fit = 'gut'; // 'gut' (margins wide enough) | 'dock' (corner)
   var NAV = 62;
   function measure() {
+    CW = document.documentElement.clientWidth || innerWidth;
     var w = $('main .wrap') || $('.wrap'), cw = vw();
     if (w) {
       var r = w.getBoundingClientRect(), cs = getComputedStyle(w);
@@ -136,8 +139,10 @@
     if (S.mode === 'goto' && S.target) return beside(S.target.getBoundingClientRect());
     return anchor(t);
   }
+  var lastTf = '', lastEye = '';
   function apply(rot) {
-    el.style.transform = 'translate3d(' + (S.x - W / 2).toFixed(1) + 'px,' + (S.y - H / 2).toFixed(1) + 'px,0) rotate(' + rot.toFixed(2) + 'deg)';
+    var tf = 'translate3d(' + (S.x - W / 2).toFixed(1) + 'px,' + (S.y - H / 2).toFixed(1) + 'px,0) rotate(' + rot.toFixed(1) + 'deg)';
+    if (tf !== lastTf) { lastTf = tf; el.style.transform = tf; } // write only when it actually moved
   }
   function tick(now) {
     if (!launched) return;
@@ -148,7 +153,7 @@
     var idle = S.mode === 'idle';
     // scrolling no longer kicks the drone: it is position:fixed and simply holds its place while the page moves
     // roam inside the margin: up/down + a little left/right; sometimes switch margins through the screen edge
-    if (idle && fit === 'gut' && !S.free && !S.warp && !sayOpen && !lite && !reduced && now > S.roamT) {
+    if (idle && fit === 'gut' && !S.free && !S.warp && !sayOpen && !isLite() && !reduced && now > S.roamT) {
       if (Math.random() < 0.28 && GUT.l - 16 >= W && GUT.r - 16 >= W) S.warp = true;
       else { S.fy = 0.08 + Math.random() * 0.84; S.fx = Math.random(); }
       S.roamT = now + 5200 + Math.random() * 4800;
@@ -191,8 +196,12 @@
     } else { ex = clamp(S.vx * 0.005, -1.8, 1.8); ey = clamp(S.vy * 0.004, -1.6, 1.6); }
     var e = Math.min(1, 0.22 * f);
     S.ex += (ex - S.ex) * e; S.ey += (ey - S.ey) * e;
-    pupil.setAttribute('transform', 'translate(' + S.ex.toFixed(2) + ' ' + S.ey.toFixed(2) + ')');
-    iris.setAttribute('transform', 'translate(' + (S.ex * 0.5).toFixed(2) + ' ' + (S.ey * 0.5).toFixed(2) + ')');
+    var eye = S.ex.toFixed(1) + ' ' + S.ey.toFixed(1);
+    if (eye !== lastEye) { // the SVG is repainted only when the eye really moves
+      lastEye = eye;
+      pupil.setAttribute('transform', 'translate(' + eye + ')');
+      iris.setAttribute('transform', 'translate(' + (S.ex * 0.5).toFixed(2) + ' ' + (S.ey * 0.5).toFixed(2) + ')');
+    }
     if (near !== S.near) { S.near = near; el.classList.toggle('jv-near', near); }
     if (scanEl) placeScan();
   }
@@ -201,6 +210,14 @@
   window.addEventListener('blur', function () { S.mIn = false; });
   var rzT = 0;
   window.addEventListener('resize', function () { clearTimeout(rzT); rzT = setTimeout(measure, 120); });
+  // phones / narrow windows have no free margin: while the reader scrolls, the parked drone steps out of the way
+  var duckT = 0;
+  window.addEventListener('scroll', function () {
+    if (!launched || fit !== 'dock' || sayOpen || touring || S.mode !== 'idle') return;
+    el.classList.add('jv-duck');
+    clearTimeout(duckT);
+    duckT = setTimeout(function () { el.classList.remove('jv-duck'); }, 1300);
+  }, { passive: true });
 
   function flyTo(t$) {
     S.mode = 'goto';

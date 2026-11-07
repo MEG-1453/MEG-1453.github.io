@@ -33,7 +33,7 @@
     if (window.MEG_EN) return Promise.resolve(window.MEG_EN);
     if (!enPromise) enPromise = new Promise(function (res, rej) {
       var s = document.createElement('script');
-      s.src = 'assets/js/lang-en.js?v=20261106';
+      s.src = 'assets/js/lang-en.js?v=20261107';
       s.onload = function () { window.MEG_EN ? res(window.MEG_EN) : rej(); };
       s.onerror = rej;
       document.head.appendChild(s);
@@ -722,4 +722,32 @@
   } else {
     document.addEventListener('DOMContentLoaded', boot);
   }
+
+  /* ---------- adaptive quality ----------
+   * Measures the real frame rate a few times (only while the tab is visible). If this device cannot
+   * hold ~40 fps with the full decoration, it switches to the lite tier on the fly: ambient loops
+   * (orbs, stars, tape, rotors, glows) stop; content, interaction and the build stay the same. */
+  (function () {
+    if (root.classList.contains('lite') || reducedMotion()) return;
+    var runs = 0;
+    function check() {
+      if (root.classList.contains('lite')) return;
+      if (document.hidden) { setTimeout(check, 3000); return; }
+      var s = [], last = 0;
+      requestAnimationFrame(function f(t) {
+        if (document.hidden) { setTimeout(check, 3000); return; }
+        if (last) { var d = t - last; if (d < 250) s.push(d); } // ignore tab switches / long pauses
+        last = t;
+        if (s.length < 90) { requestAnimationFrame(f); return; }
+        s.sort(function (a, b) { return a - b; });
+        var med = s[45], p90 = s[81];
+        if (med > 25 || p90 > 45) {
+          root.classList.add('lite');
+          document.dispatchEvent(new CustomEvent('meg:lite', { detail: { median: Math.round(med), p90: Math.round(p90) } }));
+        } else if (++runs < 4) setTimeout(check, 7000);
+      });
+    }
+    setTimeout(check, 3000);
+  })();
+  function reducedMotion() { return window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; }
 })();
